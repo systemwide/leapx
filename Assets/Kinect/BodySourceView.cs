@@ -115,11 +115,14 @@ public class BodySourceView : MonoBehaviour
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
             GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            
+            //unrender cubes
+            jointObj.GetComponent<Renderer>().enabled = false;
+            /* 
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
             lr.SetVertexCount(2);
             lr.material = BoneMaterial;
             lr.SetWidth(0.05f, 0.05f);
+            */
             
             jointObj.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
             jointObj.name = jt.ToString();
@@ -146,17 +149,19 @@ public class BodySourceView : MonoBehaviour
             Transform jointObj = bodyObject.transform.Find(jt.ToString());
             jointObj.localPosition = GetVector3FromJoint(sourceJoint);
             
-            LineRenderer lr = jointObj.GetComponent<LineRenderer>();
+            //LineRenderer lr = jointObj.GetComponent<LineRenderer>();
             if(targetJoint.HasValue)
             {
 				Transform targetJointObj = bodyObject.transform.Find(targetJoint.Value.JointType.ToString());
+                /*
                 lr.SetPosition(0, jointObj.position);
 				lr.SetPosition(1, targetJointObj.position);
+                */
                 //lr.SetColors(GetColorForState (sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
             }
             else
             {
-                lr.enabled = false;
+               // lr.enabled = false;
             }
         }
     }
