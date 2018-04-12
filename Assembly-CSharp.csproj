@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{74DE7B6D-22F4-AB75-C577-C1DC3134A87B}</ProjectGuid>
+    <ProjectGuid>{D35F7F93-5D06-FAB8-576C-D1B8888593AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -51,7 +51,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\DepthColliderDemo\Scripts\DepthImageViewer.cs" />
+     <Compile Include="Assets\DepthColliderDemo\Scripts\EggMover.cs" />
+     <Compile Include="Assets\DepthColliderDemo\Scripts\EggSpawner.cs" />
+     <Compile Include="Assets\EmojiOnHit.cs" />
      <Compile Include="Assets\FingertipTracker.cs" />
+     <Compile Include="Assets\GesturesDemo\Scripts\GestureListener.cs" />
+     <Compile Include="Assets\GesturesDemo\Scripts\PresentationScript.cs" />
      <Compile Include="Assets\Kinect\BodySourceManager.cs" />
      <Compile Include="Assets\Kinect\BodySourceView.cs" />
      <Compile Include="Assets\Kinect\ColorSourceManager.cs" />
@@ -149,6 +155,26 @@
      <Compile Include="Assets\Kinect\KinectStreamingPlugin.cs" />
      <Compile Include="Assets\Kinect\MultiSourceManager.cs" />
      <Compile Include="Assets\Kinect\QuadKinectTester.cs" />
+     <Compile Include="Assets\KinectScripts\AvatarController.cs" />
+     <Compile Include="Assets\KinectScripts\AvatarControllerClassic.cs" />
+     <Compile Include="Assets\KinectScripts\Cubeman\CubemanController.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\BoneOrientationsConstraint.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\BoneOrientationsFilter.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\ClippedLegsFilter.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\JointPositionsFilter.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\KinectHelper.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\SelfIntersectionConstraint.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\TimedLerp.cs" />
+     <Compile Include="Assets\KinectScripts\Filters\TrackingStateFilter.cs" />
+     <Compile Include="Assets\KinectScripts\KinectGestures.cs" />
+     <Compile Include="Assets\KinectScripts\KinectManager.cs" />
+     <Compile Include="Assets\KinectScripts\KinectWrapper.cs" />
+     <Compile Include="Assets\KinectScripts\Samples\FollowUserRotation.cs" />
+     <Compile Include="Assets\KinectScripts\Samples\GetJointPositionDemo.cs" />
+     <Compile Include="Assets\KinectScripts\Samples\LoadMainLevel.cs" />
+     <Compile Include="Assets\KinectScripts\Samples\MouseControl.cs" />
+     <Compile Include="Assets\KinectScripts\Samples\SetSceneAvatars.cs" />
+     <Compile Include="Assets\KinectScripts\Samples\SimpleGestureListener.cs" />
      <Compile Include="Assets\LeapMotion\Core\Scripts\Algorithms\SlidingMax.cs" />
      <Compile Include="Assets\LeapMotion\Core\Scripts\Algorithms\SmoothedFloat.cs" />
      <Compile Include="Assets\LeapMotion\Core\Scripts\Algorithms\SmoothedQuaternion.cs" />
@@ -362,6 +388,7 @@
      <Compile Include="Assets\microphoneAccess.cs" />
      <Compile Include="Assets\MoveLeftHandToKinect.cs" />
      <Compile Include="Assets\MoveRightHandToKinect.cs" />
+     <Compile Include="Assets\OverlayDemo\Scripts\KinectOverlayer.cs" />
      <Compile Include="Assets\rpalmscript.cs" />
      <Compile Include="Assets\SavWav.cs" />
      <Compile Include="Assets\SC.cs" />
@@ -373,7 +400,6 @@
      <Compile Include="Assets\Scripts\NetworkSync.cs" />
      <Compile Include="Assets\Scripts\righthandscript.cs" />
      <Compile Include="Assets\Scripts\spineScript.cs" />
-     <Compile Include="Assets\SmileEmojiOnHit.cs" />
      <Compile Include="Assets\spacetransformtohead.cs" />
      <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
      <Compile Include="Assets\SteamVR\Extras\SteamVR_LaserPointer.cs" />
@@ -567,10 +593,10 @@
  <HintPath>C:/Program Files/Unity_2017_1.2/Editor/Data/PlaybackEngines/windowsstandalonesupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
  </Reference>
  <Reference Include="LeapCSharp.NET3.5">
- <HintPath>C:/Users/vel/Test/leapEx/Assets/LeapMotion/Core/Plugins/LeapCSharp.NET3.5.dll</HintPath>
+ <HintPath>C:/Users/vel/Desktop/leapx/Assets/LeapMotion/Core/Plugins/LeapCSharp.NET3.5.dll</HintPath>
  </Reference>
  <Reference Include="InteractionEngineUtility">
- <HintPath>C:/Users/vel/Test/leapEx/Assets/LeapMotion/Modules/InteractionEngine/Plugins/InteractionEngineUtility.dll</HintPath>
+ <HintPath>C:/Users/vel/Desktop/leapx/Assets/LeapMotion/Modules/InteractionEngine/Plugins/InteractionEngineUtility.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>C:/Users/vel/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@2.0.3/UnityEngine.Advertisements.dll</HintPath>

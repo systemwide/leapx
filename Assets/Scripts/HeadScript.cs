@@ -11,15 +11,18 @@ public class HeadScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		/*
 		try{
 			if(GameObject.Find("Head")!=null){
 				this.transform.position = GameObject.Find("Head").transform.position;
-				//this.transform.rotation = cam.rotation;
 			}
 		}
 		finally{
 			
 		}
+		*/
+		this.transform.position = cam.position;
+		this.transform.rotation = cam.rotation;
 		//LMRig.position = GameObject.Find("Head").transform.position;
 	}
 }

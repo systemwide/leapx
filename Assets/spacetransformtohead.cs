@@ -13,15 +13,6 @@ public class spacetransformtohead : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-	GameObject.Find("HandTipRight").GetComponent<Renderer>().enabled = false;
-	GameObject.Find("HandTipLeft").GetComponent<Renderer>().enabled = false;
-	GameObject.Find("ThumbRight").GetComponent<Renderer>().enabled = false;
-	GameObject.Find("ThumbLeft").GetComponent<Renderer>().enabled = false;
-					
-	GameObject.Find("HandTipRight").GetComponent<LineRenderer>().enabled = false;
-	GameObject.Find("HandTipLeft").GetComponent<LineRenderer>().enabled = false;
-	GameObject.Find("ThumbRight").GetComponent<LineRenderer>().enabled = false;
-	GameObject.Find("ThumbLeft").GetComponent<LineRenderer>().enabled = false;
 		if (found == false){
 			try{
 				if (GameObject.Find("Head") != null){
