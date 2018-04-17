@@ -54,7 +54,6 @@
      <Compile Include="Assets\DepthColliderDemo\Scripts\DepthImageViewer.cs" />
      <Compile Include="Assets\DepthColliderDemo\Scripts\EggMover.cs" />
      <Compile Include="Assets\DepthColliderDemo\Scripts\EggSpawner.cs" />
-     <Compile Include="Assets\EmojiOnHit.cs" />
      <Compile Include="Assets\FingertipTracker.cs" />
      <Compile Include="Assets\GesturesDemo\Scripts\GestureListener.cs" />
      <Compile Include="Assets\GesturesDemo\Scripts\PresentationScript.cs" />
@@ -390,8 +389,7 @@
      <Compile Include="Assets\MoveRightHandToKinect.cs" />
      <Compile Include="Assets\OverlayDemo\Scripts\KinectOverlayer.cs" />
      <Compile Include="Assets\rpalmscript.cs" />
-     <Compile Include="Assets\SavWav.cs" />
-     <Compile Include="Assets\SC.cs" />
+     <Compile Include="Assets\Scripts\EmojiOnHit.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\HeadScript.cs" />
      <Compile Include="Assets\Scripts\IKControl.cs" />
@@ -399,6 +397,8 @@
      <Compile Include="Assets\Scripts\moverScript.cs" />
      <Compile Include="Assets\Scripts\NetworkSync.cs" />
      <Compile Include="Assets\Scripts\righthandscript.cs" />
+     <Compile Include="Assets\Scripts\SavWav.cs" />
+     <Compile Include="Assets\Scripts\SC.cs" />
      <Compile Include="Assets\Scripts\spineScript.cs" />
      <Compile Include="Assets\spacetransformtohead.cs" />
      <Compile Include="Assets\SteamVR\Extras\SteamVR_GazeTracker.cs" />
@@ -505,6 +505,7 @@
      <Compile Include="Assets\SteamVR\Scripts\SteamVR_Utils.cs" />
      <Compile Include="Assets\Trythis.cs" />
      <Compile Include="Assets\UISphereScript.cs" />
+     <Compile Include="Assets\VRPlayer.cs" />
      <None Include="Assets\SteamVR\Resources\SteamVR_Fade.shader" />
      <None Include="Assets\LeapMotion\Core\Resources\LeapCG.cginc" />
      <None Include="Assets\LeapMotion\Core\README_BEFORE_UPDATING.txt" />
