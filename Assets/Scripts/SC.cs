@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SC : MonoBehaviour {
 
-	public 	GameObject button;
 	public GameObject UI;
 	
 
@@ -22,13 +21,15 @@ public class SC : MonoBehaviour {
 		Debug.Log("SC Script debug");
 
 		if (other.name == "Cube"){
-        if(UI.active == true){
-			UI.SetActive(false);
-		}
-		else
-		{
-			UI.SetActive(true);
-		}
+			if(UI.activeSelf == true){
+				Debug.Log("here if");
+				UI.SetActive(false);
+			}
+			else
+			{
+				Debug.Log("here else");
+				UI.SetActive(true);
+			}
 		}
     }
 

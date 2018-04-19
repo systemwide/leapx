@@ -10,6 +10,7 @@ public class VRPlayer : NetworkBehaviour {
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
+	public Leap.Unity.HandPool leapHandController;
 
 	public Transform head;
 	public Transform body;
@@ -57,6 +58,14 @@ public class VRPlayer : NetworkBehaviour {
 		// littleRover = GameObject.Find("littleRover");
 		// bigCenter = new Vector3(244.133f, 37.995f, 228.52f);
 		// littleCenter = new Vector3(1.38f, 0.489f, 0.286f);
+
+		leapHandController = GameObject.Find("LeapHandController").GetComponent<Leap.Unity.HandPool>();
+		leapHandController.AddNewGroup(
+			"VRPlayer",
+			gameObject.transform.Find("Sphere/HandModels/CapsuleHand_L").GetComponent<Leap.Unity.CapsuleHand>(),
+			gameObject.transform.Find("Sphere/HandModels/CapsuleHand_R").GetComponent<Leap.Unity.CapsuleHand>()
+		);
+		leapHandController.EnableGroup("VRPlayer");
 	}
 
 	public void OnConnectedToServer()
@@ -92,7 +101,7 @@ public class VRPlayer : NetworkBehaviour {
 					GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 					SteamVR_Rig = gm.vrCameraRig.transform;
 					hmd = gm.hmd;
-					// controllerLeft = gm.controllerLeft;
+					controllerLeft = gm.controllerLeft;
 					// controllerRight = gm.controllerRight;
 				}
 				//the controllers are the easy ones, just move them directly
@@ -101,11 +110,12 @@ public class VRPlayer : NetworkBehaviour {
 				//now move the head to the HMD position, this is actually the eye position
 				copyTransform(hmd.transform, head);
 				try{
-					if(GameObject.Find("SpineMid")!=null){
+					if(GameObject.Find("SpineMid")!=null && controllerLeft != null){
 						Vector3 HeadPosKinect = GameObject.Find("Head").transform.position;
 						Vector3 SpinePosKinect = GameObject.Find("SpineMid").transform.position;
 						Vector3 diff = HeadPosKinect - SpinePosKinect;
 						body.transform.position = hmd.transform.position - diff;
+						body.transform.rotation = controllerLeft.transform.rotation * Quaternion.Euler(90, 0, 0);
 					}
 				} catch(UnityException e) {
 					
