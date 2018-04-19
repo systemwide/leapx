@@ -101,8 +101,8 @@ public class VRPlayer : NetworkBehaviour {
 					GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 					SteamVR_Rig = gm.vrCameraRig.transform;
 					hmd = gm.hmd;
-					controllerLeft = gm.controllerLeft;
-					// controllerRight = gm.controllerRight;
+					//controllerLeft = gm.controllerLeft;
+					controllerRight = gm.controllerRight;
 				}
 				//the controllers are the easy ones, just move them directly
 				// copyTransform(controllerLeft.transform, handLeft.transform);
@@ -110,12 +110,12 @@ public class VRPlayer : NetworkBehaviour {
 				//now move the head to the HMD position, this is actually the eye position
 				copyTransform(hmd.transform, head);
 				try{
-					if(GameObject.Find("SpineMid")!=null && controllerLeft != null){
+					if(GameObject.Find("SpineShoulder")!=null && controllerRight != null){
 						Vector3 HeadPosKinect = GameObject.Find("Head").transform.position;
-						Vector3 SpinePosKinect = GameObject.Find("SpineMid").transform.position;
+						Vector3 SpinePosKinect = GameObject.Find("SpineShoulder").transform.position;
 						Vector3 diff = HeadPosKinect - SpinePosKinect;
 						body.transform.position = hmd.transform.position - diff;
-						body.transform.rotation = controllerLeft.transform.rotation * Quaternion.Euler(90, 0, 0);
+						body.transform.rotation = controllerRight.transform.rotation * Quaternion.Euler(90, 0, 0);
 					}
 				} catch(UnityException e) {
 					
