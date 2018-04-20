@@ -14,6 +14,8 @@ public class VRPlayer : NetworkBehaviour {
 
 	public Transform head;
 	public Transform body;
+	public Transform rightFoot;
+	public Transform leftFoot;
 	// public Transform cam;
 	// public HandController handLeft;
 	// public HandController handRight;
@@ -113,9 +115,19 @@ public class VRPlayer : NetworkBehaviour {
 					if(GameObject.Find("SpineShoulder")!=null && controllerRight != null){
 						Vector3 HeadPosKinect = GameObject.Find("Head").transform.position;
 						Vector3 SpinePosKinect = GameObject.Find("SpineShoulder").transform.position;
+						Vector3 FootRightPosKinectDiff = GameObject.Find("AnkleRight").transform.position;
+						Vector3 FootLeftPosKinectDiff = GameObject.Find("AnkleLeft").transform.position;
 						Vector3 diff = HeadPosKinect - SpinePosKinect;
+						Vector3 rfootdiff = HeadPosKinect - FootRightPosKinectDiff;
+						Vector3 lfootdiff = HeadPosKinect - FootLeftPosKinectDiff;
 						body.transform.position = hmd.transform.position - diff;
 						body.transform.rotation = controllerRight.transform.rotation * Quaternion.Euler(90, 0, 0);
+						rightFoot.transform.position = hmd.transform.position - rfootdiff;
+						leftFoot.transform.position = hmd.transform.position - lfootdiff;
+						rightFoot.rotation = body.transform.rotation;
+						rightFoot.transform.rotation = Quaternion.Euler(0, body.transform.rotation.eulerAngles.y, 0);
+						leftFoot.transform.rotation = Quaternion.Euler(0, body.transform.rotation.eulerAngles.y, 0);
+
 					}
 				} catch(UnityException e) {
 					
