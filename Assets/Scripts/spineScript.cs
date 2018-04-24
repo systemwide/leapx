@@ -19,7 +19,10 @@ public class spineScript : MonoBehaviour {
 				Vector3 diff = HeadPosKinect - SpinePosKinect;
 				this.transform.position = cam.position - diff;
 			}
+		} catch(UnityException e) {
+			
+		} finally{
+
 		}
-		finally{}
 	}
 }

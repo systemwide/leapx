@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/LXSVBLJHCXVLSJVC/LeapWithUI.unity
-  isLoaded: 1
-  isActive: 1
