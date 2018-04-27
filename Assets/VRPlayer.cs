@@ -10,7 +10,8 @@ public class VRPlayer : NetworkBehaviour {
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
-	public Leap.Unity.HandPool leapHandController;
+	public GameObject leapHandController;
+	public Leap.Unity.HandPool leapHandPool;
 
 	public Transform head;
 	public Transform body;
@@ -61,13 +62,16 @@ public class VRPlayer : NetworkBehaviour {
 		// bigCenter = new Vector3(244.133f, 37.995f, 228.52f);
 		// littleCenter = new Vector3(1.38f, 0.489f, 0.286f);
 
-		leapHandController = GameObject.Find("LeapHandController").GetComponent<Leap.Unity.HandPool>();
-		leapHandController.AddNewGroup(
+		leapHandController = GameObject.Find("LeapHandController");
+		leapHandPool = leapHandController.GetComponent<Leap.Unity.HandPool>();
+		leapHandPool.AddNewGroup(
 			"VRPlayer",
-			gameObject.transform.Find("Sphere/HandModels/CapsuleHand_L").GetComponent<Leap.Unity.CapsuleHand>(),
-			gameObject.transform.Find("Sphere/HandModels/CapsuleHand_R").GetComponent<Leap.Unity.CapsuleHand>()
+			leapHandController.transform.parent.Find("HandModels/CapsuleHand_L").GetComponent<Leap.Unity.CapsuleHand>(),
+			leapHandController.transform.parent.Find("HandModels/CapsuleHand_R").GetComponent<Leap.Unity.CapsuleHand>()
+			//gameObject.transform.Find("Sphere/HandModels/LoPoly_Rigged_Hand_Left").GetComponent<Leap.Unity.CapsuleHand>(),
+			//gameObject.transform.Find("Sphere/HandModels/LoPoly_Rigged_Hand_Right").GetComponent<Leap.Unity.CapsuleHand>()
 		);
-		leapHandController.EnableGroup("VRPlayer");
+		leapHandPool.EnableGroup("VRPlayer");
 	}
 
 	public void OnConnectedToServer()
@@ -121,7 +125,7 @@ public class VRPlayer : NetworkBehaviour {
 						Vector3 rfootdiff = HeadPosKinect - FootRightPosKinectDiff;
 						Vector3 lfootdiff = HeadPosKinect - FootLeftPosKinectDiff;
 						body.transform.position = hmd.transform.position - diff;
-						body.transform.rotation = controllerRight.transform.rotation * Quaternion.Euler(90, 0, 0);
+						body.transform.rotation = controllerRight.transform.rotation * Quaternion.Euler(0, 180, 0);
 						rightFoot.transform.position = hmd.transform.position - rfootdiff;
 						leftFoot.transform.position = hmd.transform.position - lfootdiff;
 						rightFoot.rotation = body.transform.rotation;
@@ -272,6 +276,14 @@ public class VRPlayer : NetworkBehaviour {
 	{
 		Vector3 angularVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).angularVelocity : Vector3.zero;
 		return SteamVR_Rig.localToWorldMatrix.MultiplyVector(angularVelocity.normalized) * angularVelocity.magnitude ;
+	}
+
+
+	void OnTriggerEnter(Collider collider){
+		if (collider.gameObject.GetComponent<VRPlayer>() != null){
+			SteamVR_Controller.Input((int)controllerRight.index).TriggerHapticPulse((ushort)(1 * 4000));
+		}
+
 	}
 }
 

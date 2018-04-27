@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leapx", "Assembly-CSharp.csproj", "{D35F7F93-5D06-FAB8-576C-D1B8888593AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leapx", "Assembly-CSharp-firstpass.csproj", "{78E0EFDB-63C5-5954-3C47-A2EB9A13CBB2}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leapx", "Assembly-CSharp-Editor.csproj", "{8CD127FD-4D0F-872A-5BB1-EA9BBFFA9760}"
 EndProject
 Global
@@ -15,6 +17,10 @@ Global
 		{D35F7F93-5D06-FAB8-576C-D1B8888593AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D35F7F93-5D06-FAB8-576C-D1B8888593AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D35F7F93-5D06-FAB8-576C-D1B8888593AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E0EFDB-63C5-5954-3C47-A2EB9A13CBB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E0EFDB-63C5-5954-3C47-A2EB9A13CBB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E0EFDB-63C5-5954-3C47-A2EB9A13CBB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E0EFDB-63C5-5954-3C47-A2EB9A13CBB2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8CD127FD-4D0F-872A-5BB1-EA9BBFFA9760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8CD127FD-4D0F-872A-5BB1-EA9BBFFA9760}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CD127FD-4D0F-872A-5BB1-EA9BBFFA9760}.Release|Any CPU.ActiveCfg = Release|Any CPU

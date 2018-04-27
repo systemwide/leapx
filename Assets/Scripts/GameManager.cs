@@ -21,6 +21,7 @@ public class GameManager: NetworkBehaviour {
 	public void Start()
 	{
 		dataLogger = GameObject.FindObjectOfType<DataLogger>();
+		foreach(String s in Microphone.devices) Debug.Log(s);
 	}
 
 	public void enableVR()
@@ -50,9 +51,10 @@ public class GameManager: NetworkBehaviour {
 	}
 
 	private void setDataFileNames(String participantId) {
-		dataLogger.jsonFilename = "social-data__"+participantId+"__"+dataLogger.json["session"]["start"];
-		dataLogger.csvFilename = "location-data__"+participantId+"__"+dataLogger.json["session"]["start"];
-		dataLogger.audioFilename = "audio-data__"+participantId+"__"+dataLogger.json["session"]["start"];
+		String id = participantId.Length > 0 ? participantId : "000000";
+		dataLogger.jsonFilename = "social-data__"+id+"__"+dataLogger.json["session"]["start"];
+		dataLogger.csvFilename = "location-data__"+id+"__"+dataLogger.json["session"]["start"];
+		dataLogger.audioFilename = "audio-data__"+id+"__"+dataLogger.json["session"]["start"];
 	}
 
 }

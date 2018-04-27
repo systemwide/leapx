@@ -32,15 +32,16 @@ public class DataLogger : MonoBehaviour {
         json = new JSONObject();
         json.Add("session", new JSONObject());
         // initialize session object
-        json["session"].AsObject.Add("start", new JSONString(DateTime.UtcNow.ToString()));
+		DateTime now = DateTime.UtcNow;
+        json["session"].AsObject.Add("start", new JSONString(now.ToString()));
         json["session"].AsObject.Add("tasks", new JSONArray());
 		// init data file paths with default values 
 		BASE_PATH = Application.persistentDataPath;
-		jsonFilename = "social-data__:id__"+json["session"]["start"];
-		csvFilename = "location-data__:id__"+json["session"]["start"];
-		audioFilename = "audio-data__:id__"+json["session"]["start"];
+		jsonFilename = "\\social-data__000000__" + now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + ".json";
+		csvFilename = "\\location-data__000000__" + now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + ".json";
+		audioFilename = "\\audio-data__000000__" + now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss") + ".json";
 		// init 
-		activeMic = "2- USB Audio Device"; 
+		activeMic = "7- Rift Audio"; 
 		audioClip = Microphone.Start(activeMic, false, 1800, 44100);
 	}
 	
