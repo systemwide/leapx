@@ -278,12 +278,5 @@ public class VRPlayer : NetworkBehaviour {
 		return SteamVR_Rig.localToWorldMatrix.MultiplyVector(angularVelocity.normalized) * angularVelocity.magnitude ;
 	}
 
-
-	void OnTriggerEnter(Collider collider){
-		if (collider.gameObject.GetComponent<VRPlayer>() != null){
-			SteamVR_Controller.Input((int)controllerRight.index).TriggerHapticPulse((ushort)(1 * 4000));
-		}
-
-	}
 }
 
