@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.VR;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using CsvHelper;
 
 public class GameManager: NetworkBehaviour {
 
@@ -13,10 +15,9 @@ public class GameManager: NetworkBehaviour {
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
+	public InputField participantIdInput;
 
 	private DataLogger dataLogger;
-
-	public InputField participantIdInput;
 
 	public void Start()
 	{
@@ -26,11 +27,13 @@ public class GameManager: NetworkBehaviour {
 
 	public void enableVR()
 	{
-		// disable participant id field
+		// disable participant id input field
 		participantIdInput.DeactivateInputField();
-		// set data file names (not changeable after this since input is disabled)
-		setDataFileNames(participantIdInput.text);
-		// now start VR (location/audio data will start logging)
+		// initialize DataLogger json/csv/audio files
+		dataLogger.initDataFiles(participantIdInput.text);
+		// hide the participant id input field
+		participantIdInput.gameObject.SetActive(false);
+		// now start VR
 		StartCoroutine(doEnableVR());
 	}
 
@@ -48,13 +51,6 @@ public class GameManager: NetworkBehaviour {
 		UnityEngine.XR.XRSettings.enabled = true;
 		vrCameraRig.SetActive(true);
         nonVRCameraRig.SetActive(false);
-	}
-
-	private void setDataFileNames(String participantId) {
-		String id = participantId.Length > 0 ? participantId : "000000";
-		dataLogger.jsonFilename = "social-data__"+id+"__"+dataLogger.json["session"]["start"];
-		dataLogger.csvFilename = "location-data__"+id+"__"+dataLogger.json["session"]["start"];
-		dataLogger.audioFilename = "audio-data__"+id+"__"+dataLogger.json["session"]["start"];
 	}
 
 }
