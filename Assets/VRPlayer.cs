@@ -10,6 +10,13 @@ public class VRPlayer : NetworkBehaviour {
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
+	public SteamVR_TrackedObject bodyTracker;
+
+	public SteamVR_TrackedObject rightHandTracker;
+	public SteamVR_TrackedObject leftHandTracker;
+	public SteamVR_TrackedObject LFootTracker;
+	public SteamVR_TrackedObject RFootTracker;
+
 	public GameObject leapHandController;
 	public Leap.Unity.HandPool leapHandPool;
 
@@ -17,21 +24,12 @@ public class VRPlayer : NetworkBehaviour {
 	public Transform body;
 	public Transform rightFoot;
 	public Transform leftFoot;
-	// public Transform cam;
-	// public HandController handLeft;
-	// public HandController handRight;
-	// public Transform feet;
-	// public Vector3 lastHipPosition;
-	// public bool isWalking;
-	// public float thrust;
+	public Transform rightHand;
+	public Transform leftHand;
+
 	
 	public Transform kinectBodyTransform;
-	// public GameObject littleRover;
-	// public Vector3 bigCenter;
-	// public Vector3 littleCenter;
-	// public GameObject taskObject;
-	// public GameObject checkpoint;
-	
+
 	// Use this for initialization
 	[SyncVar]
 	Vector3 headPos;
@@ -42,36 +40,24 @@ public class VRPlayer : NetworkBehaviour {
 	[SyncVar]
 	Quaternion bodyRot;
 	[SyncVar]
-	Vector3 leftHandPos;
+	Vector3 leftHandPosSync;
 	[SyncVar]
-	Quaternion leftHandRot;
+	Quaternion leftHandRotSync;
 	[SyncVar]
-	Vector3 rightHandPos;
+	Vector3 rightHandPosSync;
 	[SyncVar]
-	Quaternion rightHandRot;
+	Quaternion rightHandRotSync;
+	Vector3 leftFootPosSync;
+	[SyncVar]
+	Quaternion leftFootRotSync;
+	[SyncVar]
+	Vector3 rightFootPosSync;
+	[SyncVar]
+	Quaternion rightFootRotSync;
 
 	void Start () {
 		head.transform.position = new Vector3(0, 4, 0);
 		body.transform.position = new Vector3(0, 2, 0);
-		// var roverObj = GameObject.Find("BigRover");
-		// if (roverObj != null) {
-		// 	roverTransform = roverObj.transform;
-		// }
-			
-		// littleRover = GameObject.Find("littleRover");
-		// bigCenter = new Vector3(244.133f, 37.995f, 228.52f);
-		// littleCenter = new Vector3(1.38f, 0.489f, 0.286f);
-
-		leapHandController = GameObject.Find("LeapHandController");
-		leapHandPool = leapHandController.GetComponent<Leap.Unity.HandPool>();
-		leapHandPool.AddNewGroup(
-			"VRPlayer",
-			leapHandController.transform.parent.Find("HandModels/CapsuleHand_L").GetComponent<Leap.Unity.CapsuleHand>(),
-			leapHandController.transform.parent.Find("HandModels/CapsuleHand_R").GetComponent<Leap.Unity.CapsuleHand>()
-			//gameObject.transform.Find("Sphere/HandModels/LoPoly_Rigged_Hand_Left").GetComponent<Leap.Unity.CapsuleHand>(),
-			//gameObject.transform.Find("Sphere/HandModels/LoPoly_Rigged_Hand_Right").GetComponent<Leap.Unity.CapsuleHand>()
-		);
-		leapHandPool.EnableGroup("VRPlayer");
 	}
 
 	public void OnConnectedToServer()
@@ -80,21 +66,6 @@ public class VRPlayer : NetworkBehaviour {
 		NetworkServer.SetClientReady(connectionToClient);
 	}
 
-	// public void ApplyLocalPositionToVisuals(WheelCollider collider)
-	// {
-	// 	if (collider.transform.childCount == 0) {
-	// 		return;
-	// 	}
-
-	// 	Transform visualWheel = collider.transform.GetChild(0);
-
-	// 	Vector3 position;
-	// 	Quaternion rotation;
-	// 	collider.GetWorldPose(out position, out rotation);
-
-	// 	visualWheel.transform.position = position;
-	// 	visualWheel.transform.rotation = rotation;
-	// }
 	private void FixedUpdate()
 	{
 		// if (isServer && kinectBodyTransform.gameObject.activeInHierarchy) {
@@ -105,62 +76,66 @@ public class VRPlayer : NetworkBehaviour {
 			if (UnityEngine.XR.XRSettings.enabled) {
 				if (SteamVR_Rig == null) {
 					GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+
 					SteamVR_Rig = gm.vrCameraRig.transform;
 					hmd = gm.hmd;
-					//controllerLeft = gm.controllerLeft;
+
+					controllerLeft = gm.controllerLeft;
 					controllerRight = gm.controllerRight;
+
+					LFootTracker = gm.LFootTracker;
+					RFootTracker = gm.RFootTracker;
+
+					rightHandTracker = gm.LHandTracker;
+					leftHandTracker = gm.RHandTracker;
+
+					bodyTracker = gm.bodyTracker;
 				}
 				//the controllers are the easy ones, just move them directly
 				// copyTransform(controllerLeft.transform, handLeft.transform);
 				// copyTransform(controllerRight.transform, handRight.transform);
 				//now move the head to the HMD position, this is actually the eye position
-				copyTransform(hmd.transform, head);
-				try{
-					if(GameObject.Find("SpineShoulder")!=null && controllerRight != null){
-						Vector3 HeadPosKinect = GameObject.Find("Head").transform.position;
-						Vector3 SpinePosKinect = GameObject.Find("SpineShoulder").transform.position;
-						Vector3 FootRightPosKinectDiff = GameObject.Find("AnkleRight").transform.position;
-						Vector3 FootLeftPosKinectDiff = GameObject.Find("AnkleLeft").transform.position;
-						Vector3 diff = HeadPosKinect - SpinePosKinect;
-						Vector3 rfootdiff = HeadPosKinect - FootRightPosKinectDiff;
-						Vector3 lfootdiff = HeadPosKinect - FootLeftPosKinectDiff;
-						body.transform.position = hmd.transform.position - diff;
-						body.transform.rotation = controllerRight.transform.rotation * Quaternion.Euler(0, 180, 0);
-						rightFoot.transform.position = hmd.transform.position - rfootdiff;
-						leftFoot.transform.position = hmd.transform.position - lfootdiff;
-						rightFoot.rotation = body.transform.rotation;
-						rightFoot.transform.rotation = Quaternion.Euler(0, body.transform.rotation.eulerAngles.y, 0);
-						leftFoot.transform.rotation = Quaternion.Euler(0, body.transform.rotation.eulerAngles.y, 0);
+				copyTransform(hmd.transform, head);	
 
-					}
-				} catch(UnityException e) {
-					
-				} finally{
+						/* can be added when we get the other trackers 
+						rightHand.transform.position = rightHandTracker.transform.position;
+						rightHand.transform.rotation = rightHandTracker.transform.rotation;
+						
+						leftHand.transform.position = leftHandTracker.transform.position;
+						leftHand.transform.rotation = leftHandTracker.transform.rotation;
+						*/
 
-				}
-				//move the feet to be in the tracking space, but on the ground (maybe do this with physics to ensure a good foot position later)
-				// feet.position = Vector3.Scale(head.position, new Vector3(1, 0, 1)) + Vector3.Scale(SteamVR_Rig.position, new Vector3(0, 1, 0));
-				// handleControllerInputs();
-			} else {
-				// float vertical = Input.GetAxis("Vertical");
-				// float horizontal = Input.GetAxis("Horizontal");
-				// transform.Translate(vertical * Time.fixedDeltaTime * (new Vector3(0, 0, 1)));
-				// transform.Translate(horizontal * Time.fixedDeltaTime * (new Vector3(1, 0, 0)));
+						//FOR FEET HAVE THE GREEN LIGHT FACING TOWARDS YOU
+						leftFoot.transform.position = LFootTracker.transform.position;
+						leftFoot.transform.rotation = LFootTracker.transform.rotation * Quaternion.Euler(90, 0, 0);
+						rightFoot.transform.position = RFootTracker.transform.position;
+						rightFoot.transform.rotation = RFootTracker.transform.rotation * Quaternion.Euler(90, 0, 0);
+
+						//FOR THE CHEST HAVE THE GREEN LIGHT FACING UP
+						body.transform.position = bodyTracker.transform.position;
+						body.transform.rotation = bodyTracker.transform.rotation;;
 			}
 
-			CmdSyncPlayer(head.transform.position,head.transform.rotation, body.transform.position, body.transform.rotation);
-			//, handLeft.transform.position, handLeft.transform.rotation, handRight.transform.position, handRight.transform.rotation);
+			CmdSyncPlayer(head.transform.position, head.transform.rotation, body.transform.position, body.transform.rotation, rightFoot.transform.position, rightFoot.transform.rotation,  leftFoot.transform.position, leftFoot.transform.rotation, rightHand.transform.position, rightHand.transform.rotation,  leftHand.transform.position, leftHand.transform.rotation);
+
 		} else {
 			//runs on all other clients and  the server
 			//move to the syncvars
 			head.position = Vector3.Lerp(head.position, headPos,.2f);
 			head.rotation = Quaternion.Slerp(head.rotation, headRot, .2f);
+
 			body.position = Vector3.Lerp(body.position, bodyPos,.2f);
 			body.rotation = Quaternion.Slerp(body.rotation, bodyRot, .2f);
-			// handLeft.transform.position = leftHandPos;
-			// handLeft.transform.rotation = leftHandRot;
-			// handRight.transform.position = rightHandPos;
-			// handRight.transform.rotation = rightHandRot;
+
+			rightFoot.transform.position = rightFootPosSync;
+			rightFoot.transform.rotation = rightFootRotSync;
+			leftFoot.transform.position = leftFootPosSync;
+			leftFoot.transform.rotation = leftFootRotSync;
+
+			leftHand.transform.position = leftHandPosSync;
+			leftHand.transform.rotation = leftHandRotSync;
+			rightHand.transform.position = rightHandPosSync;
+			rightHand.transform.rotation = rightHandRotSync;
 		}
 	}
 
@@ -182,7 +157,7 @@ public class VRPlayer : NetworkBehaviour {
 	// }
 
 		[Command]
-	void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 spinePos, Quaternion spineRot)
+	void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 spinePos, Quaternion spineRot, Vector3 rightFootPos, Quaternion rightFootRot, Vector3 leftFootPos, Quaternion leftFootRot, Vector3 rightHandPos, Quaternion rightHandRot,Vector3 leftHandPos, Quaternion leftHandRot )
 	{
 		head.transform.position = pos;
 		head.transform.rotation = rot;
@@ -193,6 +168,28 @@ public class VRPlayer : NetworkBehaviour {
 		body.transform.rotation = spineRot;
 		bodyPos = spinePos;
 		bodyRot = spineRot;
+
+		 
+		rightHand.transform.position = rightHandPos;
+		rightHand.transform.rotation = rightHandRot;
+		rightHandPosSync = rightHandPos;
+		rightHandRotSync = rightHandRot;
+
+		leftHand.transform.position = leftHandPos;
+		leftHand.transform.rotation = leftHandRot;
+		leftHandPosSync = leftHandPos;
+		leftHandRotSync = leftHandRot;
+
+		rightFoot.transform.position = rightFootPos;
+		rightFoot.transform.rotation = rightFootRot;
+		rightFootPosSync = rightFootPos;
+		rightFootRotSync = rightFootRot;
+
+		leftFoot.transform.position = leftFootPos;
+		leftFoot.transform.rotation = leftFootRot;
+		leftFootPosSync = leftFootPos;
+		leftFootRotSync = leftFootRot;
+		
 	}
 
 	[ClientRpc]
