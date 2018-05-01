@@ -16,7 +16,7 @@ public class DataLogger : MonoBehaviour {
 	public String activeMic;
 
 	private JSONObject json;
-	private CsvWriter csv;
+	private TextWriter csv;
 	private AudioClip aud;
 
 	// Use this for initialization
@@ -57,9 +57,8 @@ public class DataLogger : MonoBehaviour {
 		// TODO: add keys for social data
 
 		// init csv data
-		csv = new CsvWriter(new StreamWriter(csvFilename));
-		csv.WriteHeader<BodyData>();
-		csv.NextRecord();
+		csv = new StreamWriter(Application.persistentDataPath+csvFilename);
+		csv.WriteLine("{0},{1},{2},{3},{4}", 1, 2, 3, 4, 5);
 
 		// init audio data
 		activeMic = "7- Rift Audio"; 

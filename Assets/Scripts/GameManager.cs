@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.VR;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using CsvHelper;
 
 public class GameManager: NetworkBehaviour {
 
