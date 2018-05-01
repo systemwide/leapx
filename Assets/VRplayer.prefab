@@ -2771,6 +2771,7 @@ MonoBehaviour:
   hmd: {fileID: 0}
   controllerLeft: {fileID: 0}
   controllerRight: {fileID: 0}
+  bodyTracker: {fileID: 0}
   leapHandController: {fileID: 0}
   leapHandPool: {fileID: 0}
   head: {fileID: 4917760686689874}

@@ -14,6 +14,13 @@ public class GameManager: NetworkBehaviour {
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
 
+	public SteamVR_TrackedObject LFootTracker;
+	public SteamVR_TrackedObject RFootTracker;
+	public SteamVR_TrackedObject LHandTracker;
+	public SteamVR_TrackedObject RHandTracker;
+
+	public SteamVR_TrackedObject bodyTracker;
+
 	private DataLogger dataLogger;
 
 	public InputField participantIdInput;
