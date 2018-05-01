@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using SimpleJSON;
-using CsvHelper;
+//using CsvHelper;
 using UnityEngine.UI;
 
 public class DataLogger : MonoBehaviour {
@@ -35,6 +35,12 @@ public class DataLogger : MonoBehaviour {
     void OnApplicationQuit() {
 		finalizeDataFiles();
     }
+
+
+
+	// --------- HELPERS ------------
+
+
 
 	// called from GameManager, when participant id is finalized, upon clicking Start VR button
 	public void initDataFiles(String participantId) {
@@ -74,7 +80,7 @@ public class DataLogger : MonoBehaviour {
 		*/
 		
 		// finalize audio data
-		SavWav.Save(audioFilename, aud);
+		SavWav.Save(Application.persistentDataPath+audioFilename, aud);
 		Microphone.End(activeMic);
 	}
 }
