@@ -107,6 +107,11 @@ public class VRPlayer : NetworkBehaviour {
 				copyTransform(LFootTracker.transform, leftFoot);
 				copyTransform(RFootTracker.transform, rightFoot);
 
+				leftFoot.transform.rotation *= Quaternion.Euler(0, 90, 0);
+				rightFoot.transform.rotation *= Quaternion.Euler(0, -90, 0);
+				//leftFoot.transform.position += new Vector3(.2f,0,0);
+				//rightFoot.transform.position +=  new Vector3(-.2f,0,0);
+
 				// -------
 			}
 

@@ -22,6 +22,7 @@ public class DataLogger : MonoBehaviour {
 
 	private VRPlayer localPlayer;
 	private bool logFilesReady;
+	private bool hidHandsForLocal;
 
 	private int posLogCounter;
 	public int FramesPerLog;
@@ -34,7 +35,11 @@ public class DataLogger : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(!hidHandsForLocal && logFilesReady && GetPlayer() != null) {
+			GetPlayer().transform.Find("Body").Find("lhand").Find("LoPoly_Hand_Mesh_Left").GetComponent<SkinnedMeshRenderer>().enabled = false;
+			GetPlayer().transform.Find("Body").Find("rhand").Find("LoPoly_Hand_Mesh_Right").GetComponent<SkinnedMeshRenderer>().enabled = false;
+			hidHandsForLocal = true;
+		}
 	}
 
 	// called every .02 seconds
