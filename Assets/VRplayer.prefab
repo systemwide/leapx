@@ -2772,12 +2772,18 @@ MonoBehaviour:
   controllerLeft: {fileID: 0}
   controllerRight: {fileID: 0}
   bodyTracker: {fileID: 0}
+  rightHandTracker: {fileID: 0}
+  leftHandTracker: {fileID: 0}
+  LFootTracker: {fileID: 0}
+  RFootTracker: {fileID: 0}
   leapHandController: {fileID: 0}
   leapHandPool: {fileID: 0}
   head: {fileID: 4917760686689874}
   body: {fileID: 4216870917612638}
   rightFoot: {fileID: 4501469690603728}
   leftFoot: {fileID: 4753503367526868}
+  rightHand: {fileID: 0}
+  leftHand: {fileID: 0}
   kinectBodyTransform: {fileID: 0}
 --- !u!114 &114982854759127080
 MonoBehaviour:

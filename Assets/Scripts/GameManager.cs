@@ -27,7 +27,7 @@ public class GameManager: NetworkBehaviour {
 
 	public void Start()
 	{
-		dataLogger = GameObject.FindObjectOfType<DataLogger>();
+		//dataLogger = GameObject.FindObjectOfType<DataLogger>();
 		foreach(String s in Microphone.devices) Debug.Log(s);
 	}
 
@@ -36,7 +36,7 @@ public class GameManager: NetworkBehaviour {
 		// disable participant id input field
 		participantIdInput.DeactivateInputField();
 		// initialize DataLogger json/csv/audio files
-		dataLogger.initDataFiles(participantIdInput.text);
+		//dataLogger.initDataFiles(participantIdInput.text);
 		// hide the participant id input field
 		participantIdInput.gameObject.SetActive(false);
 		// now start VR

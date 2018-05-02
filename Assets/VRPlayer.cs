@@ -6,6 +6,8 @@ using UnityEngine.Networking;
 
 public class VRPlayer : NetworkBehaviour {
 
+
+	private GameManager gm;
 	public Transform SteamVR_Rig;
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
@@ -58,6 +60,8 @@ public class VRPlayer : NetworkBehaviour {
 	void Start () {
 		head.transform.position = new Vector3(0, 4, 0);
 		body.transform.position = new Vector3(0, 2, 0);
+
+		gm = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 
 	public void OnConnectedToServer()
@@ -75,8 +79,6 @@ public class VRPlayer : NetworkBehaviour {
 		if (isLocalPlayer) {
 			if (UnityEngine.XR.XRSettings.enabled) {
 				if (SteamVR_Rig == null) {
-					GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
-
 					SteamVR_Rig = gm.vrCameraRig.transform;
 					hmd = gm.hmd;
 
@@ -90,6 +92,9 @@ public class VRPlayer : NetworkBehaviour {
 					leftHandTracker = gm.RHandTracker;
 
 					bodyTracker = gm.bodyTracker;
+
+					rightHand = gm.controllerRight.transform;
+					leftHand = gm.controllerLeft.transform;
 				}
 				//the controllers are the easy ones, just move them directly
 				// copyTransform(controllerLeft.transform, handLeft.transform);
