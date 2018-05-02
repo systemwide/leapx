@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class HapticsTest : MonoBehaviour {
 
-    public SteamVR_TrackedObject controllerRight;
+    public SteamVR_TrackedObject controllerLeft;
 
     // Use this for initialization
     void Start () {
-        controllerRight = GameObject.Find("Controller (right)").GetComponent<SteamVR_TrackedObject>();
+        controllerLeft = GameObject.Find("Controller (left)").GetComponent<SteamVR_TrackedObject>();
 	}
 	
 	// Update is called once per frame
@@ -30,7 +30,7 @@ public class HapticsTest : MonoBehaviour {
     {
         for (float i = 0; i < length; i += Time.deltaTime)
         {
-            int index = (int)controllerRight.index;
+            int index = (int)controllerLeft.index;
             SteamVR_Controller.Input(index).TriggerHapticPulse((ushort)Mathf.Lerp(0, 3999, strength));
             yield return null;
         }
