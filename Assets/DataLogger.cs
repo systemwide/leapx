@@ -23,9 +23,13 @@ public class DataLogger : MonoBehaviour {
 	private VRPlayer localPlayer;
 	private bool logFilesReady;
 
+	private int posLogCounter;
+	public int FramesPerLog;
+
 	// Use this for initialization
 	void Start () {
-		
+		posLogCounter = 0;
+		FramesPerLog = 5;
 	}
 	
 	// Update is called once per frame
@@ -35,7 +39,7 @@ public class DataLogger : MonoBehaviour {
 
 	// called every .02 seconds
 	void FixedUpdate() {
-		if(logFilesReady && GetPlayer() != null) {
+		if(logFilesReady && GetPlayer() != null && posLogCounter % FramesPerLog == 0) {
 			VRPlayer p = GetPlayer();
 			// begin logging position data
 			csv.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17}",
@@ -45,6 +49,9 @@ public class DataLogger : MonoBehaviour {
 										p.rightHandPosSync.x, p.rightHandPosSync.y, p.rightHandPosSync.z,
 											p.leftFootPosSync.x, p.leftFootPosSync.y, p.leftFootPosSync.z,
 												p.rightFootPosSync.x, p.rightFootPosSync.y, p.rightFootPosSync.z);
+			posLogCounter = 0;
+		} else {
+			posLogCounter++;
 		}
 	}
 
@@ -83,7 +90,7 @@ public class DataLogger : MonoBehaviour {
 
 		// init audio data
 		activeMic = "7- Rift Audio"; 
-		aud = Microphone.Start(activeMic, false, 1800, 44100);
+		aud = Microphone.Start(activeMic, false, 1200, 44100); // 20min file
 
 		logFilesReady = true;
 	}
