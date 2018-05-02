@@ -7,18 +7,14 @@ using UnityEngine.Networking;
 public class VRPlayer : NetworkBehaviour {
 
 	public Transform SteamVR_Rig;
+
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
-	public SteamVR_TrackedObject bodyTracker;
-
-	public SteamVR_TrackedObject rightHandTracker;
-	public SteamVR_TrackedObject leftHandTracker;
+	public SteamVR_TrackedObject RHandTracker;
+	public SteamVR_TrackedObject LHandTracker;
 	public SteamVR_TrackedObject LFootTracker;
 	public SteamVR_TrackedObject RFootTracker;
-
-	public GameObject leapHandController;
-	public Leap.Unity.HandPool leapHandPool;
 
 	public Transform head;
 	public Transform body;
@@ -27,253 +23,241 @@ public class VRPlayer : NetworkBehaviour {
 	public Transform rightHand;
 	public Transform leftHand;
 
-	
-	public Transform kinectBodyTransform;
+	private GameManager gm;
 
-	// Use this for initialization
+	[HideInInspector]
 	[SyncVar]
-	Vector3 headPos;
+	public Vector3 headPos;
+	[HideInInspector]
 	[SyncVar]
-	Quaternion headRot;
+	public Quaternion headRot;
+	[HideInInspector]
 	[SyncVar]
-	Vector3 bodyPos;
+	public Vector3 bodyPos;
+	[HideInInspector]
 	[SyncVar]
-	Quaternion bodyRot;
+	public Quaternion bodyRot;
+	[HideInInspector]
 	[SyncVar]
-	Vector3 leftHandPosSync;
+	public Vector3 leftHandPosSync;
+	[HideInInspector]
 	[SyncVar]
-	Quaternion leftHandRotSync;
+	public Quaternion leftHandRotSync;
+	[HideInInspector]
 	[SyncVar]
-	Vector3 rightHandPosSync;
+	public Vector3 rightHandPosSync;
+	[HideInInspector]
 	[SyncVar]
-	Quaternion rightHandRotSync;
-	Vector3 leftFootPosSync;
+	public Quaternion rightHandRotSync;
+	[HideInInspector]
 	[SyncVar]
-	Quaternion leftFootRotSync;
+	public Vector3 leftFootPosSync;
+	[HideInInspector]
 	[SyncVar]
-	Vector3 rightFootPosSync;
+	public Quaternion leftFootRotSync;
+	[HideInInspector]
 	[SyncVar]
-	Quaternion rightFootRotSync;
+	public Vector3 rightFootPosSync;
+	[HideInInspector]
+	[SyncVar]
+	public Quaternion rightFootRotSync;
 
 	void Start () {
 		head.transform.position = new Vector3(0, 4, 0);
 		body.transform.position = new Vector3(0, 2, 0);
+		gm = GameObject.FindObjectOfType<GameManager>();
 	}
 
 	public void OnConnectedToServer()
 	{
-		// Set as ready
 		NetworkServer.SetClientReady(connectionToClient);
 	}
 
 	private void FixedUpdate()
 	{
-		// if (isServer && kinectBodyTransform.gameObject.activeInHierarchy) {
-		// 	RpcSyncKinectBodyTransform(kinectBodyTransform.GetComponent<NetworkIdentity>().netId, kinectBodyTransform.position, kinectBodyTransform.localRotation);
-		// }
-
 		if (isLocalPlayer) {
 			if (UnityEngine.XR.XRSettings.enabled) {
 				if (SteamVR_Rig == null) {
-					GameManager gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+
+					// grab tracked objects from GameManager
 
 					SteamVR_Rig = gm.vrCameraRig.transform;
+
 					hmd = gm.hmd;
 
 					controllerLeft = gm.controllerLeft;
 					controllerRight = gm.controllerRight;
 
+					LHandTracker = gm.LHandTracker;
+					RHandTracker = gm.RHandTracker;
+
 					LFootTracker = gm.LFootTracker;
 					RFootTracker = gm.RFootTracker;
-
-					rightHandTracker = gm.LHandTracker;
-					leftHandTracker = gm.RHandTracker;
-
-					bodyTracker = gm.bodyTracker;
 				}
-				//the controllers are the easy ones, just move them directly
-				// copyTransform(controllerLeft.transform, handLeft.transform);
-				// copyTransform(controllerRight.transform, handRight.transform);
-				//now move the head to the HMD position, this is actually the eye position
+
+				// ---- these are the positions we will track
+
 				copyTransform(hmd.transform, head);	
 
-						/* can be added when we get the other trackers 
-						rightHand.transform.position = rightHandTracker.transform.position;
-						rightHand.transform.rotation = rightHandTracker.transform.rotation;
-						
-						leftHand.transform.position = leftHandTracker.transform.position;
-						leftHand.transform.rotation = leftHandTracker.transform.rotation;
-						*/
+				copyTransform(controllerLeft.transform, body);
 
-						//FOR FEET HAVE THE GREEN LIGHT FACING TOWARDS YOU
-						leftFoot.transform.position = LFootTracker.transform.position;
-						leftFoot.transform.rotation = LFootTracker.transform.rotation * Quaternion.Euler(90, 0, 0);
-						rightFoot.transform.position = RFootTracker.transform.position;
-						rightFoot.transform.rotation = RFootTracker.transform.rotation * Quaternion.Euler(90, 0, 0);
+				copyTransform(LHandTracker.transform, leftHand);
+				copyTransform(RHandTracker.transform, rightHand);
+				
+				copyTransform(LFootTracker.transform, leftFoot);
+				copyTransform(RFootTracker.transform, rightFoot);
 
-						//FOR THE CHEST HAVE THE GREEN LIGHT FACING UP
-						body.transform.position = bodyTracker.transform.position;
-						body.transform.rotation = bodyTracker.transform.rotation;;
+				// -------
 			}
 
-			CmdSyncPlayer(head.transform.position, head.transform.rotation, body.transform.position, body.transform.rotation, rightFoot.transform.position, rightFoot.transform.rotation,  leftFoot.transform.position, leftFoot.transform.rotation, rightHand.transform.position, rightHand.transform.rotation,  leftHand.transform.position, leftHand.transform.rotation);
+			// sync positions on the server
+
+			CmdSyncPlayer(head.transform.position, head.transform.rotation, 
+							body.transform.position, body.transform.rotation,
+								leftHand.transform.position, leftHand.transform.rotation,
+									rightHand.transform.position, rightHand.transform.rotation,
+										leftFoot.transform.position, leftFoot.transform.rotation,
+											rightFoot.transform.position, rightFoot.transform.rotation);
 
 		} else {
-			//runs on all other clients and  the server
-			//move to the syncvars
+
+			// (runs on all other clients and the server)
+
+			// move positions to the sync vars
+
 			head.position = Vector3.Lerp(head.position, headPos,.2f);
 			head.rotation = Quaternion.Slerp(head.rotation, headRot, .2f);
 
 			body.position = Vector3.Lerp(body.position, bodyPos,.2f);
 			body.rotation = Quaternion.Slerp(body.rotation, bodyRot, .2f);
 
-			rightFoot.transform.position = rightFootPosSync;
-			rightFoot.transform.rotation = rightFootRotSync;
-			leftFoot.transform.position = leftFootPosSync;
-			leftFoot.transform.rotation = leftFootRotSync;
+			leftHand.position = Vector3.Lerp(leftHand.position, leftHandPosSync,.2f);
+			leftHand.rotation = Quaternion.Slerp(leftHand.rotation, leftHandRotSync, .2f);
+			rightHand.position = Vector3.Lerp(rightHand.position, rightHandPosSync,.2f);
+			rightHand.rotation = Quaternion.Slerp(rightHand.rotation, rightHandRotSync, .2f);
 
-			leftHand.transform.position = leftHandPosSync;
-			leftHand.transform.rotation = leftHandRotSync;
-			rightHand.transform.position = rightHandPosSync;
-			rightHand.transform.rotation = rightHandRotSync;
+			leftFoot.position = Vector3.Lerp(leftFoot.position, leftFootPosSync,.2f);
+			leftFoot.rotation = Quaternion.Slerp(leftFoot.rotation, leftFootRotSync, .2f);
+			rightFoot.position = Vector3.Lerp(rightFoot.position, rightFootPosSync,.2f);
+			rightFoot.rotation = Quaternion.Slerp(rightFoot.rotation, rightFootRotSync, .2f);
 		}
 	}
 
+	[Command]
+	void CmdSyncPlayer(Vector3 hpos, Quaternion hrot, 
+							Vector3 bpos, Quaternion brot, 
+								Vector3 lhpos, Quaternion lhrot, 
+									Vector3 rhpos, Quaternion rhrot, 
+										Vector3 lfpos, Quaternion lfrot, 
+											Vector3 rfpos, Quaternion rfrot)
+	{
+
+		// head
+
+		head.transform.position = hpos;
+		head.transform.rotation = hrot;
+		headPos = hpos;
+		headRot = hrot;
+
+		// body
+
+		body.transform.position = bpos;
+		body.transform.rotation = brot;
+		bodyPos = bpos;
+		bodyRot = brot;
+
+		// hands
+
+		leftHand.transform.position = lhpos;
+		leftHand.transform.rotation = lhrot;
+		leftHandPosSync = lhpos;
+		leftHandRotSync = lhrot;
+		 
+		rightHand.transform.position = rhpos;
+		rightHand.transform.rotation = rhrot;
+		rightHandPosSync = rhpos;
+		rightHandRotSync = rhrot;
+
+		// feet
+
+		leftFoot.transform.position = lfpos;
+		leftFoot.transform.rotation = lfrot;
+		leftFootPosSync = lfpos;
+		leftFootRotSync = lfrot;
+
+		rightFoot.transform.position = rfpos;
+		rightFoot.transform.rotation = rfrot;
+		rightFootPosSync = rfpos;
+		rightFootRotSync = rfrot;
+	}
+
 	// [Command]
-	// void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 lhpos, Quaternion lhrot, Vector3 rhpos, Quaternion rhrot)
+    // public void CmdInstantiateTaskObjects(Vector3 newPos)
+    // {
+	// 	GameObject newTask = Instantiate(taskObject, transform.position + newPos, Quaternion.identity) as GameObject;
+	// 	newTask.transform.localScale += new Vector3(10, 10, 10);
+	// 	//Network.Instantiate (TaskObject, newPos, Quaternion.identity, 0);
+
+	// 	//create checkpoint
+	// 	GameObject newCheckpoint = Instantiate(checkpoint, transform.position + newPos, Quaternion.identity) as GameObject;
+	// 	newCheckpoint.transform.parent = newTask.transform;
+
+	// 	//disable renderer on the taskObject container so that it can be used as a task boundary
+	// 	newTask.transform.GetComponent<Renderer>().enabled = false;
+	// 	newTask.GetComponent<Rigidbody>().useGravity = true;
+	// 	newTask.GetComponent<Rigidbody>().isKinematic = false;
+
+    //     NetworkServer.Spawn(newTask);
+    //     NetworkServer.Spawn(newCheckpoint);
+    // }
+
+	// private void handleControllerInputs()
 	// {
-	// 	head.transform.position = pos;
-	// 	head.transform.rotation = rot;
-	// 	handLeft.transform.position = lhpos;
-	// 	handRight.transform.position = rhpos;
-	// 	handLeft.transform.rotation = lhrot;
-	// 	handRight.transform.rotation = rhrot;
-	// 	headPos = pos;
-	// 	headRot = rot;
-	// 	leftHandPos = lhpos;
-	// 	leftHandRot = lhrot;
-	// 	rightHandPos = rhpos;
-	// 	rightHandRot = rhrot;
+	// 	int indexLeft = (int)controllerLeft.index;
+	// 	int indexRight = (int)controllerRight.index;
+
+	// 	handLeft.controllerVelocity = getControllerVelocity(controllerLeft);
+	// 	handRight.controllerVelocity = getControllerVelocity(controllerRight);
+	// 	handLeft.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
+	// 	handRight.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
+		
+	// 	float triggerLeft = getTrigger(controllerLeft);
+	// 	float triggerRight = getTrigger(controllerRight);
+
+	// 	Vector2 joyLeft = getJoystick(controllerLeft);
+	// 	Vector2 joyRight = getJoystick(controllerRight);
+	// 	handLeft.squeeze(triggerLeft);
+	// 	handRight.squeeze(triggerRight);
+		
+	// 	vehicleDrive(joyLeft, joyRight);
 	// }
 
-		[Command]
-	void CmdSyncPlayer(Vector3 pos, Quaternion rot, Vector3 spinePos, Quaternion spineRot, Vector3 rightFootPos, Quaternion rightFootRot, Vector3 leftFootPos, Quaternion leftFootRot, Vector3 rightHandPos, Quaternion rightHandRot,Vector3 leftHandPos, Quaternion leftHandRot )
-	{
-		head.transform.position = pos;
-		head.transform.rotation = rot;
-		headPos = pos;
-		headRot = rot;
+	// private float getTrigger(SteamVR_TrackedObject controller)
+	// {
+	// 	return controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude : 0.0f;
+	// }
 
-		body.transform.position = spinePos;
-		body.transform.rotation = spineRot;
-		bodyPos = spinePos;
-		bodyRot = spineRot;
+	// private Vector2 getJoystick(SteamVR_TrackedObject controller)
+	// {
+	// 	return controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad) : Vector2.zero;
+	// }
 
-		 
-		rightHand.transform.position = rightHandPos;
-		rightHand.transform.rotation = rightHandRot;
-		rightHandPosSync = rightHandPos;
-		rightHandRotSync = rightHandRot;
+	// private Vector3 getControllerVelocity(SteamVR_TrackedObject controller)
+	// {
+	// 	Vector3 controllerVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).velocity : Vector3.zero;
+	// 	return SteamVR_Rig.localToWorldMatrix.MultiplyVector(controllerVelocity.normalized)*controllerVelocity.magnitude;
+	// }
 
-		leftHand.transform.position = leftHandPos;
-		leftHand.transform.rotation = leftHandRot;
-		leftHandPosSync = leftHandPos;
-		leftHandRotSync = leftHandRot;
-
-		rightFoot.transform.position = rightFootPos;
-		rightFoot.transform.rotation = rightFootRot;
-		rightFootPosSync = rightFootPos;
-		rightFootRotSync = rightFootRot;
-
-		leftFoot.transform.position = leftFootPos;
-		leftFoot.transform.rotation = leftFootRot;
-		leftFootPosSync = leftFootPos;
-		leftFootRotSync = leftFootRot;
-		
-	}
-
-	[ClientRpc]
-	void RpcSyncKinectBodyTransform(NetworkInstanceId roverId, Vector3 pos, Quaternion rot)
-	{
-		// GameObject clientRover = ClientScene.FindLocalObject(roverId);
-
-		// Vector3 diff = bigCenter - littleCenter;
-		// clientRover.transform.position = littleCenter;
-
-		// Vector3 differencePos = pos - bigCenter;
-		// differencePos = differencePos * .01f;
-		// clientRover.transform.rotation = rot;
-		// clientRover.transform.position = littleCenter + differencePos;
-	}
-
-	[Command]
-    public void CmdInstantiateTaskObjects(Vector3 newPos)
-    {
-		// GameObject newTask = Instantiate(taskObject, transform.position + newPos, Quaternion.identity) as GameObject;
-		// newTask.transform.localScale += new Vector3(10, 10, 10);
-		// //Network.Instantiate (TaskObject, newPos, Quaternion.identity, 0);
-
-		// //create checkpoint
-		// GameObject newCheckpoint = Instantiate(checkpoint, transform.position + newPos, Quaternion.identity) as GameObject;
-		// newCheckpoint.transform.parent = newTask.transform;
-
-		// //disable renderer on the taskObject container so that it can be used as a task boundary
-		// newTask.transform.GetComponent<Renderer>().enabled = false;
-		// newTask.GetComponent<Rigidbody>().useGravity = true;
-		// newTask.GetComponent<Rigidbody>().isKinematic = false;
-
-        // NetworkServer.Spawn(newTask);
-        // NetworkServer.Spawn(newCheckpoint);
-    }
+	// private Vector3 getControllerAngularVelocity(SteamVR_TrackedObject controller)
+	// {
+	// 	Vector3 angularVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).angularVelocity : Vector3.zero;
+	// 	return SteamVR_Rig.localToWorldMatrix.MultiplyVector(angularVelocity.normalized) * angularVelocity.magnitude ;
+	// }
 
 	private void copyTransform(Transform from, Transform to)
 	{
 		to.position = from.position;
 		to.rotation = from.rotation;
 	}
-
-	private void handleControllerInputs()
-	{
-		// int indexLeft = (int)controllerLeft.index;
-		// int indexRight = (int)controllerRight.index;
-
-		// handLeft.controllerVelocity = getControllerVelocity(controllerLeft);
-		// handRight.controllerVelocity = getControllerVelocity(controllerRight);
-		// handLeft.controllerAngularVelocity = getControllerAngularVelocity(controllerLeft);
-		// handRight.controllerAngularVelocity = getControllerAngularVelocity(controllerRight);
-		
-		// float triggerLeft = getTrigger(controllerLeft);
-		// float triggerRight = getTrigger(controllerRight);
-
-		// Vector2 joyLeft = getJoystick(controllerLeft);
-		// Vector2 joyRight = getJoystick(controllerRight);
-		// handLeft.squeeze(triggerLeft);
-		// handRight.squeeze(triggerRight);
-		
-		// vehicleDrive(joyLeft, joyRight);
-	}
-
-	private float getTrigger(SteamVR_TrackedObject controller)
-	{
-		return controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger).magnitude : 0.0f;
-	}
-
-	private Vector2 getJoystick(SteamVR_TrackedObject controller)
-	{
-		return controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).GetAxis(Valve.VR.EVRButtonId.k_EButton_SteamVR_Touchpad) : Vector2.zero;
-	}
-
-	private Vector3 getControllerVelocity(SteamVR_TrackedObject controller)
-	{
-		Vector3 controllerVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).velocity : Vector3.zero;
-		return SteamVR_Rig.localToWorldMatrix.MultiplyVector(controllerVelocity.normalized)*controllerVelocity.magnitude;
-	}
-
-	private Vector3 getControllerAngularVelocity(SteamVR_TrackedObject controller)
-	{
-		Vector3 angularVelocity = controller.index >= 0 ? SteamVR_Controller.Input((int)controller.index).angularVelocity : Vector3.zero;
-		return SteamVR_Rig.localToWorldMatrix.MultiplyVector(angularVelocity.normalized) * angularVelocity.magnitude ;
-	}
-
 }
 

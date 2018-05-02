@@ -7,44 +7,50 @@ using UnityEngine.VR;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class GameManager: NetworkBehaviour {
+public class GameManager: MonoBehaviour {
 
 	public GameObject vrCameraRig;
 	public GameObject nonVRCameraRig;
+
 	public SteamVR_TrackedObject hmd;
 	public SteamVR_TrackedObject controllerLeft;
 	public SteamVR_TrackedObject controllerRight;
-	public InputField participantIdInput;
-
 	public SteamVR_TrackedObject LFootTracker;
 	public SteamVR_TrackedObject RFootTracker;
 	public SteamVR_TrackedObject LHandTracker;
 	public SteamVR_TrackedObject RHandTracker;
 
-	public SteamVR_TrackedObject bodyTracker;
+	public InputField participantIdInput;
+	public Button participantIdSubmitButton;
 
 	private DataLogger dataLogger;
+	private NetworkManagerHUD nmhud;
 
 	public void Start()
 	{
 		dataLogger = GameObject.FindObjectOfType<DataLogger>();
-		foreach(String s in Microphone.devices) Debug.Log(s);
+		nmhud = GameObject.FindObjectOfType<NetworkManagerHUD>();
+		nmhud.showGUI = false;
+		// foreach(String s in Microphone.devices) Debug.Log(s);
 	}
 
 	public void enableVR()
 	{
-		// disable participant id input field
-		participantIdInput.DeactivateInputField();
-		// initialize DataLogger json/csv/audio files
-		dataLogger.initDataFiles(participantIdInput.text);
-		// hide the participant id input field
-		participantIdInput.gameObject.SetActive(false);
-		// now start VR
 		StartCoroutine(doEnableVR());
 	}
 
 	public void endSession() {
 		Application.Quit ();
+	}
+
+	public void submitParticipantId() {
+		// disable participant id input field
+		participantIdInput.interactable = false;
+		participantIdSubmitButton.interactable = false;
+		// initialize DataLogger json/csv/audio files
+		dataLogger.initDataFiles(participantIdInput.text);
+		// show network HUD when finished
+		nmhud.showGUI = true;
 	}
 
 	IEnumerator doEnableVR()

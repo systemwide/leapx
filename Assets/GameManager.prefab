@@ -9,18 +9,17 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1467453920906276}
+  m_RootGameObject: {fileID: 1799451869714334}
   m_IsPrefabParent: 1
---- !u!1 &1467453920906276
+--- !u!1 &1799451869714334
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4439829307334396}
-  - component: {fileID: 114960124204879242}
-  - component: {fileID: 114302532487081854}
+  - component: {fileID: 4514235427564840}
+  - component: {fileID: 114739355110690060}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -28,67 +27,38 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4439829307334396
+--- !u!4 &4514235427564840
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1467453920906276}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1799451869714334}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.46600002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114302532487081854
+--- !u!114 &114739355110690060
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1467453920906276}
+  m_GameObject: {fileID: 1799451869714334}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 998a8379c5afd9c428923cf24de8fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vrCameraRig: {fileID: 0}
-  vrCameraRigControlCenter: {fileID: 0}
   nonVRCameraRig: {fileID: 0}
-  rover: {fileID: 0}
-  roverCameraSet: 0
   hmd: {fileID: 0}
   controllerLeft: {fileID: 0}
   controllerRight: {fileID: 0}
---- !u!114 &114960124204879242
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1467453920906276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 86
-    i1: 98
-    i2: 22
-    i3: 234
-    i4: 138
-    i5: 162
-    i6: 78
-    i7: 84
-    i8: 169
-    i9: 45
-    i10: 42
-    i11: 83
-    i12: 211
-    i13: 109
-    i14: 155
-    i15: 221
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  LFootTracker: {fileID: 0}
+  RFootTracker: {fileID: 0}
+  LHandTracker: {fileID: 0}
+  RHandTracker: {fileID: 0}
+  participantIdInput: {fileID: 0}
+  participantIdSubmitButton: {fileID: 0}
